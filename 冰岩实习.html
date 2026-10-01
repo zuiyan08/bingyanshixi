@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      }
+      body {
+        overflow: hidden;
+        height: 100vh;
+        width: 100vw;
+        display: flex;
+        background-color: #ffffff;
+      }
+
+      .sidebar {
+        width: 260px;
+        background-color: #f3f4f6;
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid #e5e7eb;
+      }
+
+      .side-header {
+        display: flex;
+        align-items: center;
+        padding: 8px 12px;
+        gap: 8px;
+        margin-bottom: 16px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 16px;
+        color: #1f2937;
+      }
+
+      .avatar {
+        /* 这个没想到，ai检查出来不对劲了喵 */
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-color: #e5e7eb;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .new-chat-btn {
+        padding: 10px 14px;
+        background-color: #e8f0fe;
+        color: #1677ff;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 500;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+
+      .sidebar-menu {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .menu-item {
+        padding: 16px 16px;
+        border-radius: 10px;
+        color: #374151;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .menu-item:hover {
+        background-color: #e5e7eb;
+      }
+
+      .menu-item .badge {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #ef4444;
+      }
+
+      .menu-item .arrow {
+        color: #9ca3af;
+      }
+
+      .side-footer {
+        margin-top: auto;
+        padding: 10px;
+        background-color: #ffffff;
+        border-radius: 12px;
+        font-size: 14px;
+        color: #374151;
+        position: relative;
+      }
+
+      .side-footer .close-btn {
+        position: absolute;
+        right: 10px;
+        color: #9ca3af;
+      }
+
+      .main-content {
+        display: flex;
+        flex-direction: column;
+        padding: 40px 80px 30px;
+      }
+
+      .top-bar {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .notification {
+        position: relative;
+      }
+
+      .notification .red-dot {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        top: -6px;
+        right: -2px;
+        background-color: #ef4444;
+        border-radius: 50%;
+      }
+
+      .user-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-color: #e5e7eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .welcome-area {
+        margin-top: 120px;
+        margin-bottom: 40px;
+      }
+
+      .title {
+        font-size: 30px;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 8px;
+        font-weight: 700;
+        line-height: 1.2;
+      }
+
+      .encouragement {
+        position: absolute;
+        top: 180px;
+        right: 120px;
+        padding: 12px 20px;
+        /* 这个渐变不会写😭 */
+        background: linear-gradient(90deg, #f8fafc, #ffedd5);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 16px;
+        color: #374151;
+        font-weight: 500;
+      }
+
+      .function-areas {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        max-width: 700px;
+        margin-bottom: auto;
+      }
+
+      .function-card {
+        padding: 18px 24px;
+        background-color: #f3f4f6;
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .function-card:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        border-color: #d1d5db;
+      }
+
+      .function-card .icon-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #1f2937;
+      }
+
+      .function-card .description {
+        font-size: 15px;
+        color: #78716c;
+        padding-left: 32px;
+      }
+
+      .quick-tags {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin: 30px 0 16px;
+        max-width: 900px;
+        flex-wrap: wrap;
+      }
+
+      .tag-item {
+        padding: 6px 12px;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        font-size: 14px;
+        color: #6b7280;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .input-area {
+        max-width: 900px;
+        width: 100%;
+        margin: 0 auto;
+        position: relative;
+      }
+
+      .input-box {
+        width: 100%;
+        padding: 16px 60px 16px 50px;
+        border: 1px solid #e5e7eb;
+        border-radius: 24px;
+        background-color: #ffffff;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        font-size: 16px;
+        outline: 1px solid #e5e7eb;
+      }
+
+      .input-area .left-icon {
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        color: #6b7280;
+        font-size: 18px;
+        line-height: 0;
+      }
+
+      .input-area .right-actions {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transform: translateY(-50%);
+      }
+
+      .input-area .send-btn {
+        width: 32px;
+        height: 32px;
+        background-color: #e5e7eb;
+        color: #989da546;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 1. 侧边栏部分 -->
+    <div class="sidebar">
+      <div class="side-header">
+        <div class="avatar">👩</div>
+        <span>烤冷面</span>
+        <span style="margin-left: auto; color: #9ca3af">▢</span>
+      </div>
+
+      <button class="new-chat-btn">
+        <span>➕ 新建对话</span>
+        <span style="margin-left: auto; color: #9ca3af">Crtl K</span>
+      </button>
+
+      <div class="side-menu">
+        <div class="menu-item"><span>⟳</span><span>AI 搜索</span></div>
+        <div class="menu-item"><span>🖋</span><span>帮我写作</span></div>
+        <div class="menu-item"><span>🗺</span><span>图像生成</span></div>
+        <div class="menu-item"><span>🗖</span><span>阅读总结</span></div>
+        <div class="menu-item">
+          <span>💬</span><span>最近对话</span>
+          <span class="badge" style="margin-left: auto"></span>
+          <span class="arrow" style="margin-left: auto">></span>
+        </div>
+        <div class="menu-item">
+          <span>✰</span><span>我的智能体</span>
+          <span class="arrow" style="margin-left: auto">></span>
+        </div>
+        <div class="menu-item"><span>🗓</span><span>我的收藏夹</span></div>
+      </div>
+
+      <div class="side-footer">
+        <span>⦿</span>
+        <span>下载 Windows 客户端</span>
+        <span class="close-btn">×</span>
+      </div>
+    </div>
+
+    <!-- 2. 主内容部分 -->
+    <div class="main-content">
+      <div class="top-bar">
+        <div class="notification">
+          <span>🔔</span>
+          <span class="red-dot"></span>
+        </div>
+        <div class="user-avatar">👤</div>
+      </div>
+
+      <div class="welcome-area">
+        <h3 class="title">你好，用户</h3>
+        <h3 class="title">你的人工智障已上线!</h3>
+      </div>
+
+      <div class="encouragement">
+        <span>🎓</span>
+        <span>烤冷面的激励计划 →</span>
+      </div>
+
+      <div class="function-areas">
+        <div class="function-card">
+          <div class="icon-title">
+            <span style="color: #1677ff">⟳</span>
+            <span>AI 搜索</span>
+          </div>
+          <div class="description">实时资讯，丰富信源，整合搜索</div>
+        </div>
+        <div class="function-card">
+          <div class="icon-title">
+            <span style="color: #22c55e">🧩</span>
+            <span>帮我写作</span>
+          </div>
+          <div class="description">多种体裁，润色校对，一键成文</div>
+        </div>
+        <div class="function-card">
+          <div class="icon-title">
+            <span style="color: #f59e0b">🗺</span>
+            <span>图像生成</span>
+          </div>
+          <div class="description">自定风格，搜集灵感，复制同款</div>
+        </div>
+        <div class="function-card">
+          <div class="icon-title">
+            <span style="color: #ef4444">🗖</span>
+            <span>阅读总结</span>
+          </div>
+          <div class="description">论文课件，财报合同，翻译总结</div>
+        </div>
+        <div class="function-card">
+          <div class="icon-title">
+            <span style="color: #a855f7">🎵</span>
+            <span>音乐生成</span>
+          </div>
+          <div class="description">歌词定制，曲风任选，人声演唱</div>
+        </div>
+        <div class="function-card">
+          <div class="icon-title">
+            <span style="color: #9ca3af">⌗</span>
+            <span>更多</span>
+          </div>
+          <div class="description">点击展示更多技能</div>
+        </div>
+      </div>
+
+      <div class="quick-tags">
+        <div class="tag-item">🖋 帮我写作</div>
+        <div class="tag-item">🗺 图像生成</div>
+        <div class="tag-item">⟳ AI 搜索</div>
+        <div class="tag-item">🗖 阅读总结</div>
+        <div class="tag-item">🎵 音乐生成</div>
+        <div class="tag-item">📜 解题答疑</div>
+        <div class="tag-item">📖 学术搜索</div>
+        <div class="tag-item">⌗ 更多</div>
+      </div>
+
+      <div class="input-area">
+        <span class="left-icon">📎</span>
+        <input
+          class="input-box"
+          type="text"
+          placeholder="发消息、输入 @ / 选择技能"
+        />
+        <div class="right-actions">
+          <span>✂</span>
+          <span>🎤</span>
+          <div class="send-btn">⬆</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
