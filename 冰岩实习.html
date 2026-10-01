@@ -27,6 +27,10 @@
         display: flex;
         flex-direction: column;
         border-right: 1px solid #e5e7eb;
+        overflow-y: auto;
+        /* 这是来自ai的隐藏滚动条的代码（之前没听说过） */
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE 10+ */
       }
 
       .side-header {
@@ -199,8 +203,9 @@
       }
 
       .function-card:hover {
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
         border-color: #d1d5db;
+        transform: translateY(-2px);
       }
 
       .function-card .icon-title {
@@ -300,9 +305,9 @@
         cursor: pointer;
       }
 
-      /* .input-area .send-btn.active:hover {
+      .input-area .send-btn.active:hover {
         background-color: #0f68e0;
-      } */
+      }
 
       .input-area .left-icon:hover,
       .input-area .right-actions span:hover {
@@ -334,6 +339,30 @@
       .input-area .right-actions span:nth-child(2):hover::after {
         content: "语音输入";
       }
+
+      .dropdown-content {
+        max-height: 0;
+        overflow: hidden;
+        background-color: #ffffff;
+        border-radius: 8px;
+        margin: 0 8px 8px;
+      }
+
+      .dropdown-item {
+        padding: 10px 16px 10px 36px;
+        color: #4b5563;
+        font-size: 14px;
+        border-radius: 6px;
+        margin: 2px 4px;
+      }
+
+      .dropdown-content.show {
+        max-height: 300px;
+      }
+
+      .dropdown-item:hover {
+        background-color: #f3f4f6;
+      }
     </style>
   </head>
   <body>
@@ -355,15 +384,29 @@
         <div class="menu-item"><span>🖋</span><span>帮我写作</span></div>
         <div class="menu-item"><span>🗺</span><span>图像生成</span></div>
         <div class="menu-item"><span>🗖</span><span>阅读总结</span></div>
-        <div class="menu-item">
+        <div class="menu-item has-dropdown">
           <span>💬</span><span>最近对话</span>
           <span class="badge" style="margin-left: auto"></span>
-          <span class="arrow" style="margin-left: auto">></span>
+          <span class="arrow dropdown-arrow" style="margin-left: auto">></span>
         </div>
-        <div class="menu-item">
+
+        <div class="dropdown-content">
+          <div class="dropdown-item">调用豆包</div>
+          <div class="dropdown-item">不如大肥鱼</div>
+          <div class="dropdown-item">还是手搓精准😭</div>
+        </div>
+
+        <div class="menu-item has-dropdown">
           <span>✰</span><span>我的智能体</span>
-          <span class="arrow" style="margin-left: auto">></span>
+          <span class="arrow dropdown-arrow" style="margin-left: auto">></span>
         </div>
+
+        <div class="dropdown-content">
+          <div class="dropdown-item">代码改bug助手</div>
+          <div class="dropdown-item">文档润色小助手</div>
+          <div class="dropdown-item">永劫学习规划助手</div>
+        </div>
+
         <div class="menu-item"><span>🗓</span><span>我的收藏夹</span></div>
       </div>
 
@@ -466,6 +509,7 @@
     </div>
 
     <script>
+      // 此处为输入框效果
       const inputBox = document.querySelector(".input-box");
       const sendBtn = document.querySelector(".send-btn");
 
@@ -484,6 +528,19 @@
           sendBtn.classList.remove("active");
         }
       });
+      // ----华--丽--的--分--割--线-----
+
+      // 此处为下拉箭头菜单
+      const dropdownItems = document.querySelectorAll(".has-dropdown");
+
+      for (let i = 0; i < dropdownItems.length; i++) {
+        const menu = dropdownItems[i];
+        const dropdownContent = menu.nextElementSibling;
+
+        menu.addEventListener("click", () => {
+          dropdownContent.classList.toggle("show");
+        });
+      }
     </script>
   </body>
 </html>
