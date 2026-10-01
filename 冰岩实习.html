@@ -238,6 +238,12 @@
         gap: 4px;
       }
 
+      .tag-item:hover {
+        background-color: #f3f4f6;
+        border-color: #d1d5db;
+        color: #374151;
+      }
+
       .input-area {
         max-width: 900px;
         width: 100%;
@@ -263,6 +269,7 @@
         color: #6b7280;
         font-size: 18px;
         line-height: 0;
+        /* transform: translateY(-50%); */
       }
 
       .input-area .right-actions {
@@ -284,6 +291,48 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        cursor: not-allowed;
+      }
+
+      .input-area .send-btn.active {
+        background-color: #1677ff;
+        color: #ffffff;
+        cursor: pointer;
+      }
+
+      /* .input-area .send-btn.active:hover {
+        background-color: #0f68e0;
+      } */
+
+      .input-area .left-icon:hover,
+      .input-area .right-actions span:hover {
+        position: relative;
+      }
+
+      .input-area .left-icon:hover::after,
+      .input-area .right-actions span:hover::after {
+        content: "";
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #374151;
+        color: #ffffff;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        white-space: nowrap;
+      }
+
+      .input-area .left-icon:hover::after {
+        content: "上传文件";
+      }
+
+      .input-area .right-actions span:first-child:hover::after {
+        content: "剪切";
+      }
+      .input-area .right-actions span:nth-child(2):hover::after {
+        content: "语音输入";
       }
     </style>
   </head>
@@ -415,5 +464,26 @@
         </div>
       </div>
     </div>
+
+    <script>
+      const inputBox = document.querySelector(".input-box");
+      const sendBtn = document.querySelector(".send-btn");
+
+      inputBox.addEventListener("input", () => {
+        if (inputBox.value) {
+          sendBtn.classList.add("active");
+        } else {
+          sendBtn.classList.remove("active");
+        }
+      });
+
+      sendBtn.addEventListener("click", () => {
+        if (sendBtn.classList.contains("active")) {
+          alert(`发送消息: ${inputBox.value}`);
+          inputBox.value = "";
+          sendBtn.classList.remove("active");
+        }
+      });
+    </script>
   </body>
 </html>
