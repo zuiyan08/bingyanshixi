@@ -68,6 +68,7 @@
         display: flex;
         justify-content: space-between;
         margin-bottom: 20px;
+        cursor: pointer;
       }
 
       .sidebar-menu {
@@ -114,12 +115,15 @@
         position: absolute;
         right: 10px;
         color: #9ca3af;
+        cursor: pointer;
       }
 
       .main-content {
         display: flex;
         flex-direction: column;
         padding: 40px 80px 30px;
+        flex: 1;
+        height: 100vh;
       }
 
       .top-bar {
@@ -200,6 +204,8 @@
         display: flex;
         flex-direction: column;
         gap: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
       }
 
       .function-card:hover {
@@ -241,6 +247,8 @@
         display: flex;
         align-items: center;
         gap: 4px;
+        cursor: pointer;
+        transition: all 0.2s ease;
       }
 
       .tag-item:hover {
@@ -274,7 +282,7 @@
         color: #6b7280;
         font-size: 18px;
         line-height: 0;
-        /* transform: translateY(-50%); */
+        transform: translateY(-50%);
       }
 
       .input-area .right-actions {
@@ -354,6 +362,11 @@
         font-size: 14px;
         border-radius: 6px;
         margin: 2px 4px;
+      }
+
+      .dropdown-item.active {
+        background-color: #e5e7eb; /*(这里如果能用!important可能视角效果好一点)*/
+        font-weight: 600;
       }
 
       .dropdown-content.show {
@@ -513,6 +526,47 @@
       .user-avatar:hover {
         cursor: pointer;
       }
+
+      /* 要能聊天了 */
+      .chat-container {
+        flex: 1;
+        width: 100%;
+        padding: 80px 40px 20px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        display: none;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .message-item {
+        max-width: 70%;
+        display: flex;
+        gap: 10px;
+      }
+      .user-message {
+        margin-left: auto;
+        flex-direction: row-reverse;
+      }
+      .ai-message {
+        margin-right: auto;
+      }
+
+      .message-content {
+        padding: 12px 16px;
+        border-radius: 16px;
+        line-height: 1.6;
+        font-size: 15px;
+      }
+
+      .user-message .message-content {
+        background-color: #1677ff;
+        color: #fff;
+      }
+      .ai-message .message-content {
+        background-color: #f3f4f6;
+        color: #1f2937;
+      }
     </style>
   </head>
   <body>
@@ -540,8 +594,8 @@
           <span class="arrow dropdown-arrow" style="margin-left: auto">></span>
         </div>
 
-        <div class="dropdown-content">
-          <div class="dropdown-item">调用豆包</div>
+        <div class="dropdown-content recent-chat-list">
+          <div class="dropdown-item active">调用豆包</div>
           <div class="dropdown-item">不如大肥鱼</div>
           <div class="dropdown-item">还是手搓精准😭</div>
         </div>
@@ -551,7 +605,7 @@
           <span class="arrow dropdown-arrow" style="margin-left: auto">></span>
         </div>
 
-        <div class="dropdown-content">
+        <div class="dropdown-content zhinengti">
           <div class="dropdown-item">代码改bug助手</div>
           <div class="dropdown-item">文档润色小助手</div>
           <div class="dropdown-item">永劫学习规划助手</div>
@@ -643,6 +697,8 @@
         <div class="tag-item">⌗ 更多</div>
       </div>
 
+      <div class="chat-container"></div>
+
       <div class="input-area">
         <span class="left-icon">📎</span>
         <input
@@ -722,13 +778,13 @@
         }
       });
 
-      sendBtn.addEventListener("click", () => {
-        if (sendBtn.classList.contains("active")) {
-          alert(`发送消息: ${inputBox.value}`);
-          inputBox.value = "";
-          sendBtn.classList.remove("active");
-        }
-      });
+      // sendBtn.addEventListener("click", () => {
+      //   if (sendBtn.classList.contains("active")) {
+      //     alert(`发送消息: ${inputBox.value}`);
+      //     inputBox.value = "";
+      //     sendBtn.classList.remove("active");
+      //   }
+      // });
       // ----华--丽--的--分--割--线-----
 
       // 此处为下拉箭头菜单
@@ -821,6 +877,90 @@
           alert("账号或密码错误，请检查后重试");
         }
       });
+
+      // 回车发送信息
+      inputBox.addEventListener("keyup", (e) => {
+        if (e.key === "Enter" && sendBtn.classList.contains("active")) {
+          sendBtn.click();
+        }
+      });
+
+      // 聊天部分(新学到了JS动态生成盒子和封装函数的思想，惊奇)
+      const welcomeArea = document.querySelector(".welcome-area");
+      const encouragement = document.querySelector(".encouragement");
+      const functionAreas = document.querySelector(".function-areas");
+      const quickTags = document.querySelector(".quick-tags");
+      const chatContainer = document.querySelector(".chat-container");
+      const aiReply = "收到你的消息啦，我来帮你梳理下相关的信息～";
+
+      function appendMessage(content, isUser = true) {
+        const messageItem = document.createElement("div");
+        messageItem.classList.add("message-item");
+        if (isUser) {
+          messageItem.classList.add("user-message");
+        } else {
+          messageItem.classList.add("ai-message");
+        }
+        messageItem.innerHTML = `
+        <div class="message-avatar">${isUser ? "👤" : "👩"}</div>
+        <div class="message-content">${content}</div>`;
+        chatContainer.appendChild(messageItem);
+      }
+
+      sendBtn.addEventListener("click", () => {
+        if (!sendBtn.classList.contains("active")) return;
+        const userInput = inputBox.value;
+        if (!userInput) return;
+
+        if (chatContainer.style.display !== "flex") {
+          welcomeArea.style.display = "none";
+          encouragement.style.display = "none";
+          functionAreas.style.display = "none";
+          quickTags.style.display = "none";
+          chatContainer.style.display = "flex";
+        }
+        appendMessage(userInput, true);
+
+        inputBox.value = "";
+        sendBtn.classList.remove("active");
+        appendMessage(aiReply, false);
+      });
+
+      // 新对话部分
+      const recentChatList = document.querySelector(".recent-chat-list");
+      const newChatBtn = document.querySelector(".new-chat-btn");
+      newChatBtn.addEventListener("click", () => {
+        chatContainer.innerHTML = "";
+        welcomeArea.style.display = "block";
+        encouragement.style.display = "block";
+        functionAreas.style.display = "grid";
+        quickTags.style.display = "flex";
+        chatContainer.style.display = "none";
+        inputBox.value = "";
+        sendBtn.classList.remove("active");
+        document
+          .querySelectorAll(".recent-chat-list .dropdown-item")
+          .forEach((item) => {
+            item.classList.remove("active");
+          });
+      });
+
+      document
+        .querySelectorAll(".recent-chat-list .dropdown-item")
+        .forEach((item) => {
+          item.addEventListener("click", () => {
+            document
+              .querySelectorAll(".recent-chat-list .dropdown-item")
+              .forEach((i) => i.classList.remove("active"));
+            item.classList.add("active");
+            chatContainer.innerHTML = "";
+            welcomeArea.style.display = "none";
+            encouragement.style.display = "none";
+            functionAreas.style.display = "none";
+            quickTags.style.display = "none";
+            chatContainer.style.display = "flex";
+          });
+        });
     </script>
   </body>
 </html>
