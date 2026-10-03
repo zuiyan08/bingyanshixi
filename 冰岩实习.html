@@ -272,7 +272,6 @@
         background-color: #ffffff;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
         font-size: 16px;
-        outline: 1px solid #e5e7eb;
       }
 
       .input-area .left-icon {
@@ -918,12 +917,34 @@
           functionAreas.style.display = "none";
           quickTags.style.display = "none";
           chatContainer.style.display = "flex";
+          const newChatItem = document.createElement("div");
+          newChatItem.classList.add("dropdown-item", "active");
+          newChatItem.innerHTML = "新对话";
+          document
+            .querySelectorAll(".recent-chat-list .dropdown-item")
+            .forEach((item) => {
+              item.classList.remove("active");
+            });
+          recentChatList.prepend(newChatItem);
+          newChatItem.addEventListener("click", () => {
+            document
+              .querySelectorAll(".recent-chat-list .dropdown-item")
+              .forEach((item) => {
+                item.classList.remove("active");
+              });
+            newChatItem.classList.add("active");
+            chatContainer.innerHTML = "";
+            welcomeArea.style.display = "none";
+            encouragement.style.display = "none";
+            functionAreas.style.display = "none";
+            quickTags.style.display = "none";
+            chatContainer.style.display = "flex";
+          });
+          appendMessage(userInput, true);
+          inputBox.value = "";
+          sendBtn.classList.remove("active");
+          appendMessage(aiReply, false);
         }
-        appendMessage(userInput, true);
-
-        inputBox.value = "";
-        sendBtn.classList.remove("active");
-        appendMessage(aiReply, false);
       });
 
       // 新对话部分
