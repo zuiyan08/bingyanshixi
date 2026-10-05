@@ -71,7 +71,7 @@
         cursor: pointer;
       }
 
-      .sidebar-menu {
+      .side-menu {
         display: flex;
         flex-direction: column;
       }
@@ -119,11 +119,26 @@
       }
 
       .main-content {
+        position: relative;
         display: flex;
         flex-direction: column;
         padding: 40px 80px 30px;
         flex: 1;
         height: 100vh;
+        min-width: 0;
+        height: 100vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+
+      .content-column {
+        flex: 1;
+        min-height: 0;
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
       }
 
       .top-bar {
@@ -177,7 +192,7 @@
         position: absolute;
         top: 180px;
         right: 120px;
-        padding: 12px 20px;
+        padding: 12px 40px 12px 20px;
         /* 这个渐变不会写😭 */
         background: linear-gradient(90deg, #f8fafc, #ffedd5);
         border-radius: 20px;
@@ -189,11 +204,39 @@
         font-weight: 500;
       }
 
+      .encouragement-close {
+        position: absolute;
+        top: 6px;
+        right: 8px;
+        width: 22px;
+        height: 22px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.72);
+        color: #9ca3af;
+        font-size: 14px;
+        line-height: 1;
+        cursor: pointer;
+      }
+
+      .encouragement-close:hover {
+        background-color: #e5e7eb;
+        color: #374151;
+      }
+
+      .encouragement.is-closed {
+        display: none;
+      }
+
       .function-areas {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 16px;
-        max-width: 700px;
+        /* max-width: 700px; */
         margin-bottom: auto;
       }
 
@@ -231,7 +274,7 @@
 
       .quick-tags {
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         gap: 10px;
         margin: 30px 0 16px;
         max-width: 900px;
@@ -280,7 +323,7 @@
         top: 50%;
         color: #6b7280;
         font-size: 18px;
-        line-height: 0;
+        line-height: 1;
         transform: translateY(-50%);
       }
 
@@ -630,85 +673,96 @@
         <div class="user-avatar">👤</div>
       </div>
 
-      <div class="welcome-area">
-        <h3 class="title">你好，用户</h3>
-        <h3 class="title">你的人工智障已上线!</h3>
-      </div>
-
       <div class="encouragement">
         <span>🎓</span>
         <span>烤冷面的激励计划 →</span>
+        <button
+          type="button"
+          class="encouragement-close"
+          aria-label="关闭激励计划"
+          title="关闭"
+        >
+          ×
+        </button>
       </div>
 
-      <div class="function-areas">
-        <div class="function-card">
-          <div class="icon-title">
-            <span style="color: #1677ff">⟳</span>
-            <span>AI 搜索</span>
-          </div>
-          <div class="description">实时资讯，丰富信源，整合搜索</div>
+      <!-- [排版] 新增内容列包裹层：欢迎语 / 功能卡 / 快捷标签 / 聊天区 / 输入框 -->
+      <div class="content-column">
+        <div class="welcome-area">
+          <h3 class="title">你好，用户</h3>
+          <h3 class="title">你的人工智障已上线!</h3>
         </div>
-        <div class="function-card">
-          <div class="icon-title">
-            <span style="color: #22c55e">🧩</span>
-            <span>帮我写作</span>
-          </div>
-          <div class="description">多种体裁，润色校对，一键成文</div>
-        </div>
-        <div class="function-card">
-          <div class="icon-title">
-            <span style="color: #f59e0b">🗺</span>
-            <span>图像生成</span>
-          </div>
-          <div class="description">自定风格，搜集灵感，复制同款</div>
-        </div>
-        <div class="function-card">
-          <div class="icon-title">
-            <span style="color: #ef4444">🗖</span>
-            <span>阅读总结</span>
-          </div>
-          <div class="description">论文课件，财报合同，翻译总结</div>
-        </div>
-        <div class="function-card">
-          <div class="icon-title">
-            <span style="color: #a855f7">🎵</span>
-            <span>音乐生成</span>
-          </div>
-          <div class="description">歌词定制，曲风任选，人声演唱</div>
-        </div>
-        <div class="function-card">
-          <div class="icon-title">
-            <span style="color: #9ca3af">⌗</span>
-            <span>更多</span>
-          </div>
-          <div class="description">点击展示更多技能</div>
-        </div>
-      </div>
 
-      <div class="quick-tags">
-        <div class="tag-item">🖋 帮我写作</div>
-        <div class="tag-item">🗺 图像生成</div>
-        <div class="tag-item">⟳ AI 搜索</div>
-        <div class="tag-item">🗖 阅读总结</div>
-        <div class="tag-item">🎵 音乐生成</div>
-        <div class="tag-item">📜 解题答疑</div>
-        <div class="tag-item">📖 学术搜索</div>
-        <div class="tag-item">⌗ 更多</div>
-      </div>
+        <div class="function-areas">
+          <div class="function-card">
+            <div class="icon-title">
+              <span style="color: #1677ff">⟳</span>
+              <span>AI 搜索</span>
+            </div>
+            <div class="description">实时资讯，丰富信源，整合搜索</div>
+          </div>
+          <div class="function-card">
+            <div class="icon-title">
+              <span style="color: #22c55e">🧩</span>
+              <span>帮我写作</span>
+            </div>
+            <div class="description">多种体裁，润色校对，一键成文</div>
+          </div>
+          <div class="function-card">
+            <div class="icon-title">
+              <span style="color: #f59e0b">🗺</span>
+              <span>图像生成</span>
+            </div>
+            <div class="description">自定风格，搜集灵感，复制同款</div>
+          </div>
+          <div class="function-card">
+            <div class="icon-title">
+              <span style="color: #ef4444">🗖</span>
+              <span>阅读总结</span>
+            </div>
+            <div class="description">论文课件，财报合同，翻译总结</div>
+          </div>
+          <div class="function-card">
+            <div class="icon-title">
+              <span style="color: #a855f7">🎵</span>
+              <span>音乐生成</span>
+            </div>
+            <div class="description">歌词定制，曲风任选，人声演唱</div>
+          </div>
+          <div class="function-card">
+            <div class="icon-title">
+              <span style="color: #9ca3af">⌗</span>
+              <span>更多</span>
+            </div>
+            <div class="description">点击展示更多技能</div>
+          </div>
+        </div>
 
-      <div class="chat-container"></div>
+        <div class="quick-tags">
+          <div class="tag-item">🖋 帮我写作</div>
+          <div class="tag-item">🗺 图像生成</div>
+          <div class="tag-item">⟳ AI 搜索</div>
+          <div class="tag-item">🗖 阅读总结</div>
+          <div class="tag-item">🎵 音乐生成</div>
+          <div class="tag-item">📜 解题答疑</div>
+          <div class="tag-item">📖 学术搜索</div>
+          <div class="tag-item">⌗ 更多</div>
+        </div>
 
-      <div class="input-area">
-        <span class="left-icon">📎</span>
-        <input
-          class="input-box"
-          type="text"
-          placeholder="发消息、输入 @ / 选择技能"
-        />
-        <div class="right-actions">
-          <span>✂</span>
-          <span>🎤</span>
-          <div class="send-btn">⬆</div>
+        <div class="chat-container"></div>
+
+        <div class="input-area">
+          <span class="left-icon" data-tooltip="上传文件">📎</span>
+          <input
+            class="input-box"
+            type="text"
+            placeholder="发消息、输入 @ / 选择技能"
+          />
+          <div class="right-actions">
+            <span data-tooltip="剪切">✂</span>
+            <span data-tooltip="语音输入">🎤</span>
+            <div class="send-btn">⬆</div>
+          </div>
         </div>
       </div>
     </div>
@@ -885,12 +939,31 @@
       });
 
       // 聊天部分(新学到了JS动态生成盒子和封装函数的思想，惊奇)
+
+      // ===== [接入改动 A] 接口地址（此前缺失，导致聊天功能报 ReferenceError）=====
+      // 页面不直接连厂商，而是连本地小中转 llm-proxy.py：
+      // ① 同源，不会被跨域拦；② API Key 只存在自己电脑上，这个 HTML 里一个字符都没有。
+      const API_URL =
+        location.protocol === "file:"
+          ? "http://127.0.0.1:8000/api/chat" // 双击打开时的兜底（换端口要跟着改）
+          : "/api/chat"; // 从 http://127.0.0.1:8000/ 打开时走同源相对路径
+
+      const chatHistory = [];
+      let isSending = false;
       const welcomeArea = document.querySelector(".welcome-area");
       const encouragement = document.querySelector(".encouragement");
       const functionAreas = document.querySelector(".function-areas");
       const quickTags = document.querySelector(".quick-tags");
       const chatContainer = document.querySelector(".chat-container");
       const aiReply = "收到你的消息啦，我来帮你梳理下相关的信息～";
+      const encouragementClose = document.querySelector(".encouragement-close");
+      encouragementClose.addEventListener("click", () => {
+        encouragement.classList.add("is-closed");
+      });
+
+      function scrollChatToBottom() {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
 
       function appendMessage(content, isUser = true) {
         const messageItem = document.createElement("div");
@@ -904,9 +977,49 @@
         <div class="message-avatar">${isUser ? "👤" : "👩"}</div>
         <div class="message-content">${content}</div>`;
         chatContainer.appendChild(messageItem);
+
+        scrollChatToBottom();
+
+        const bubble = messageItem.querySelector(".message-content");
+        return bubble;
       }
 
-      sendBtn.addEventListener("click", () => {
+      async function streamChat(bubble) {
+        bubble.innerHTML = "正在思考…";
+        const payload = JSON.stringify({ messages: chatHistory });
+        let res;
+        try {
+          res = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: payload,
+          });
+        } catch (err) {
+          throw new Error(
+            "连不上本地中转。请确认 llm-proxy.py 正在运行，并且你是用 http://127.0.0.1:8000/ 打开的页面。",
+          );
+        }
+
+        if (!res.ok) {
+          const text = await res.text();
+          let msg = text;
+          try {
+            const j = JSON.parse(text);
+            msg = (j && j.error && j.error.message) || j.detail || text;
+          } catch (_) {}
+          throw new Error("HTTP " + res.status + "：" + msg);
+        }
+        let full = "";
+        if (!full.trim()) {
+          bubble.textContent =
+            "（模型没有返回任何内容，检查 llm-config.json 里的 model 名称是否正确）";
+          return "";
+        }
+        return full;
+      }
+
+      sendBtn.addEventListener("click", async () => {
+        if (isSending) return;
         if (!sendBtn.classList.contains("active")) return;
         const userInput = inputBox.value;
         if (!userInput) return;
@@ -934,26 +1047,47 @@
               });
             newChatItem.classList.add("active");
             chatContainer.innerHTML = "";
+            chatHistory.length = 0;
             welcomeArea.style.display = "none";
             encouragement.style.display = "none";
             functionAreas.style.display = "none";
             quickTags.style.display = "none";
             chatContainer.style.display = "flex";
           });
-          appendMessage(userInput, true);
-          inputBox.value = "";
-          sendBtn.classList.remove("active");
-          appendMessage(aiReply, false);
+        }
+
+        appendMessage(userInput, true);
+        inputBox.value = "";
+        sendBtn.classList.remove("active");
+        // appendMessage(aiReply, false);
+        chatHistory.push({ role: "user", content: `${userInput}` });
+
+        const bubble = appendMessage("", false);
+        isSending = true;
+        try {
+          const answer = await streamChat(bubble);
+          if (answer) chatHistory.push({ role: "assistant", content: answer });
+        } catch (err) {
+          bubble.textContent = "❌ " + err.message;
+        } finally {
+          isSending = false;
+          inputBox.focus();
         }
       });
 
       // 新对话部分
+
       const recentChatList = document.querySelector(".recent-chat-list");
       const newChatBtn = document.querySelector(".new-chat-btn");
       newChatBtn.addEventListener("click", () => {
         chatContainer.innerHTML = "";
+        chatHistory.length = 0;
         welcomeArea.style.display = "block";
-        encouragement.style.display = "block";
+        encouragement.style.display = encouragement.classList.contains(
+          "is-closed",
+        )
+          ? "none"
+          : "block";
         functionAreas.style.display = "grid";
         quickTags.style.display = "flex";
         chatContainer.style.display = "none";
@@ -975,6 +1109,7 @@
               .forEach((i) => i.classList.remove("active"));
             item.classList.add("active");
             chatContainer.innerHTML = "";
+            chatHistory.length = 0;
             welcomeArea.style.display = "none";
             encouragement.style.display = "none";
             functionAreas.style.display = "none";
